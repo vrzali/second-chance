@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import ProductList from "../components/ProductList";
 import CategoryMenu from "../components/CategoryMenu";
-import Cart from "../components/Cart";
 
 import { useQuery } from '@apollo/client';
 import { QUERY_USER } from '../utils/queries';
+import AddItem from '../components/AddItem';
 
 function MyItems() {
   const { data } = useQuery(QUERY_USER);
@@ -18,6 +17,7 @@ function MyItems() {
   return (
     <>
       <div className="container">
+        <AddItem />
         <CategoryMenu />
         <ProductList type="myItems" />
       </div>
