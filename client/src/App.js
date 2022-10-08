@@ -17,6 +17,8 @@ import Nav from './components/Nav';
 import { StoreProvider } from './utils/GlobalState';
 import Success from './pages/Success';
 import OrderHistory from './pages/OrderHistory';
+import MyItems from './pages/MyItems';
+import About from './pages/About';
 
 const httpLink = createHttpLink({
   uri: '/graphql',
@@ -50,6 +52,10 @@ function App() {
                 element={<Home />} 
               />
               <Route 
+                path="/general" 
+                element={<Home />} 
+              />
+              <Route 
                 path="/login" 
                 element={<Login />} 
               />
@@ -64,6 +70,14 @@ function App() {
               <Route 
                 path="/orderHistory" 
                 element={<OrderHistory />} 
+              />
+              <Route 
+                path="/myItems" 
+                element={<MyItems />} 
+              />
+              <Route 
+                path="/about" 
+                element={<About />} 
               />
               <Route 
                 path="/products/:id" 
