@@ -7,7 +7,7 @@ import { QUERY_PRODUCTS } from '../../utils/queries';
 import { idbPromise } from '../../utils/helpers';
 import spinner from '../../assets/spinner.gif';
 
-function ProductList() {
+function ProductList(props) {
   const [state, dispatch] = useStoreContext();
 
   const { currentCategory } = state;
@@ -34,6 +34,18 @@ function ProductList() {
   }, [data, loading, dispatch]);
 
   function filterProducts() {
+    if (props.type === "myItems") {
+      if (!currentCategory) {
+        return state.products.filter(
+          (product) => product.myItem === "true"
+        );
+      }
+  
+      return state.products.filter(
+        (product) => (product.category._id === currentCategory) && (product.myItem == "true")
+      );
+    }
+
     if (!currentCategory) {
       return state.products;
     }
@@ -56,6 +68,7 @@ function ProductList() {
               name={product.name}
               price={product.price}
               quantity={product.quantity}
+              myItem={product.myItem}
             />
           ))}
         </div>
