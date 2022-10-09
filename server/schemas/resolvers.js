@@ -91,17 +91,26 @@ const resolvers = {
   },
   Mutation: {
     addUser: async (parent, args) => {
+      
       const user = await User.create(args);
       const token = signToken(user);
 
       return { token, user };
     },
-    addProduct: async (parent, args) => {
-      console.log("hereee");
-      console.log(args);
-      const product = await Product.create(args);
-
-      return { product };
+    addProduct: async (parent, args, context) => {
+      if (context.user) {
+        const product = await Product.create({ ...args, username: context.user.username });
+    
+        await User.findByIdAndUpdate(
+          { _id: context.user._id },
+          { $push: { products: product._id } },
+          { new: true }
+        );
+    
+        return product;
+      }
+    
+      throw new AuthenticationError('You need to be logged in!');
     },
     addOrder: async (parent, { products }, context) => {
       console.log(context);
