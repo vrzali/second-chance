@@ -41,8 +41,6 @@ function FormItem() {
             category: { _id: categoryId, name: categoryName },
         };
 
-        console.log(formData);
-
         const mutationResponse = await addProduct({ variables: formData,});
         const product = mutationResponse.data.addProduct.product;
         dispatch({

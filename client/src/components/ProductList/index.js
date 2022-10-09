@@ -41,8 +41,6 @@ function ProductList(props) {
   }, [data, loading, dispatch]);
 
   function filterProducts() {
-
-    console.log(state.products);
     if (props.type === "myItems") {
       if (!currentCategory) {
         return state.products.filter(

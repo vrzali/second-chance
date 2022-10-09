@@ -10,7 +10,7 @@ import {
   ADD_TO_CART,
   UPDATE_PRODUCTS,
 } from '../utils/actions';
-import { QUERY_PRODUCTS } from '../utils/queries';
+import { QUERY_PRODUCTS, QUERY_USER } from '../utils/queries';
 import { idbPromise } from '../utils/helpers';
 import spinner from '../assets/spinner.gif';
 
@@ -22,7 +22,14 @@ function Detail() {
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  const { products, cart, currentUser } = state;
+  const { products, cart } = state;
+
+  const response = useQuery(QUERY_USER);
+  let currentUser;
+
+  if (response.data) {
+    currentUser = response.data.user._id;
+  }
 
   useEffect(() => {
     // already in global store
