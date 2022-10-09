@@ -2,15 +2,10 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { LOGIN } from '../../utils/mutations';
 import Auth from '../../utils/auth';
-import { useStoreContext } from '../../utils/GlobalState';
-import {
-  UPDATE_CURRENT_USER
-} from '../../utils/actions';
 
 function LoginItem(props) {
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [login, { error }] = useMutation(LOGIN);
-  const [dispatch] = useStoreContext();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -20,10 +15,6 @@ function LoginItem(props) {
       });
       const token = mutationResponse.data.login.token;
       Auth.login(token);
-      dispatch({
-        type: UPDATE_CURRENT_USER,
-        currentUser: mutationResponse.data.login.user._id,
-      });
     } catch (e) {
       console.log(e);
     }

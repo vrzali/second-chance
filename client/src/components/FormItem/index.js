@@ -1,6 +1,5 @@
 import React from "react";
 import { useStoreContext } from '../../utils/GlobalState';
-import { ADD_PRODUCT } from "../../utils/actions";
 import { useMutation } from '@apollo/client';
 import { ADD_PRODUCT_MUTATION } from '../../utils/mutations';
 import {useNavigate} from 'react-router-dom';
@@ -9,7 +8,7 @@ import { QUERY_USER } from '../../utils/queries';
 
 
 function FormItem() {
-    const [state, dispatch] = useStoreContext();
+    const [state] = useStoreContext();
     const { categories } = state;
     const [addProduct] = useMutation(ADD_PRODUCT_MUTATION);
     const navigate = useNavigate();
@@ -41,12 +40,7 @@ function FormItem() {
             category: { _id: categoryId, name: categoryName },
         };
 
-        const mutationResponse = await addProduct({ variables: formData,});
-        const product = mutationResponse.data.addProduct.product;
-        dispatch({
-            type: ADD_PRODUCT,
-            product: product
-        });
+        await addProduct({ variables: formData,});
         
         navigate('/myItems');
         window.location.reload(); 
