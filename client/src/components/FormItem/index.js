@@ -3,7 +3,7 @@ import { useStoreContext } from '../../utils/GlobalState';
 import { ADD_PRODUCT } from "../../utils/actions";
 import { useMutation } from '@apollo/client';
 import { ADD_PRODUCT_MUTATION } from '../../utils/mutations';
-import {useNavigate, Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 
 function FormItem() {
@@ -36,13 +36,15 @@ function FormItem() {
 
         const mutationResponse = await addProduct({ variables: formData,});
         const product = mutationResponse.data.addProduct.product;
-        console.log("here");
-        console.log(product);
         dispatch({
             type: ADD_PRODUCT,
             product: product
         });
         
+        navigate('/myItems');
+    };
+
+    const handleClick = async (event) => {
         navigate('/myItems');
     };
 
@@ -76,9 +78,9 @@ function FormItem() {
               <button id="add-product-button" type="submit" class="button">Add</button>
           </form>
           <div class="panel">
-          <Link to="/myItems">
-              Cancel
-            </Link>
+          <button type="button" onClick={(event) => {
+            handleClick(event);
+          }}>Cancel</button>
           </div>
       </div>
     );

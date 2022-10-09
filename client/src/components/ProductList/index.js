@@ -37,7 +37,7 @@ function ProductList(props) {
     if (props.type === "myItems") {
       if (!currentCategory) {
         return state.products.filter(
-          (product) => product.myItem === "true"
+          (product) => product !== undefined && product.myItem === "true"
         );
       }
   

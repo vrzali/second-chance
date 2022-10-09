@@ -1,12 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // The ...props means, spread all of the passed props onto this element
 // That way we don't have to define them all individually
 function AddItem(props) {
+  const navigate = useNavigate();
+
+  const handleClick = async (event) => {
+    navigate('/form');
+  };
 
   return (
-    <Link to="/form">Add your Item</Link>
+    
+    <button type="button" onClick={(event) => {
+      handleClick(event);
+    }}>Add your item</button>
   );
 }
 
