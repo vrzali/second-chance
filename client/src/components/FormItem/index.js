@@ -3,11 +3,14 @@ import { useStoreContext } from '../../utils/GlobalState';
 import { ADD_PRODUCT } from "../../utils/actions";
 import { useMutation } from '@apollo/client';
 import { ADD_PRODUCT_MUTATION } from '../../utils/mutations';
+import {useNavigate, Link} from 'react-router-dom';
+
 
 function FormItem() {
     const [state, dispatch] = useStoreContext();
     const { categories } = state;
     const [addProduct] = useMutation(ADD_PRODUCT_MUTATION);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -35,11 +38,12 @@ function FormItem() {
         const product = mutationResponse.data.addProduct.product;
         console.log("here");
         console.log(product);
-        // dispatch({
-        //     type: ADD_PRODUCT,
-        //     product: product
-        // });
+        dispatch({
+            type: ADD_PRODUCT,
+            product: product
+        });
         
+        navigate('/myItems');
     };
 
     return (
@@ -50,7 +54,7 @@ function FormItem() {
           }}>
               <label for="name">Name:</label>
               <input type="text" id="product_name" placeholder="Product name..." required/>
-              <label for="category">Category:</label>              
+              <label>Category:</label>              
               <select name="product_category">
                   {categories.map((item) => (
                       <option
@@ -61,21 +65,20 @@ function FormItem() {
                       </option>
                   ))}
               </select>
-              <label for="description">Description:</label>
+              <label >Description:</label>
               <input type="text" id="product_description" placeholder="Description..." required/>
-              <label for="price">Price:</label>
+              <label >Price:</label>
               <input type="number" id="product_price" required/>
-              <label for="quantity">Quantity:</label>
+              <label >Quantity:</label>
               <input type="number" id="product_quantity" required/>
-              <label for="image">Image:</label>
+              <label >Image:</label>
               <input type="file" name="product_image" width="48" height="48" required></input>
               <button id="add-product-button" type="submit" class="button">Add</button>
           </form>
           <div class="panel">
-              
-              <a>
-                  <button class="button" id="cancel-button">Cancel</button>
-              </a>
+          <Link to="/myItems">
+              Cancel
+            </Link>
           </div>
       </div>
     );
