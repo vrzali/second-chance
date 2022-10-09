@@ -14,10 +14,10 @@ function ProductItem(item) {
     _id,
     price,
     quantity,
-    myItem,
+    ownedBy,
   } = item;
 
-  const { cart } = state
+  const { cart, currentUser } = state
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === _id)
@@ -53,7 +53,7 @@ function ProductItem(item) {
         <div>{quantity} {pluralize("item", quantity)} in stock</div>
         <span>${price}</span>
       </div>
-      {myItem === "true" ? "" : <button onClick={addToCart}>Add to cart</button>}
+      {ownedBy === currentUser ? "" : <button onClick={addToCart}>Add to cart</button>}
     </div>
   );
 }

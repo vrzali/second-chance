@@ -13,7 +13,7 @@ const typeDefs = gql`
     image: String
     quantity: Int
     price: Float
-    myItem: String
+    ownedBy: ID
     category: Category
   }
 
@@ -59,7 +59,7 @@ const typeDefs = gql`
     addOrder(products: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
     updateProduct(_id: ID!, quantity: Int!): Product
-    addProduct(name: String!, description: String!, image: String!, quantity: Int!, price: Float!, myItem: String!, category: GraphQLCategory!): Product
+    addProduct(name: String!, description: String!, image: String!, quantity: Int!, price: Float!, ownedBy: ID!, category: GraphQLCategory!): Product
     login(email: String!, password: String!): Auth
   }
 `;

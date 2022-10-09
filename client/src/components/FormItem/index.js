@@ -28,7 +28,7 @@ function FormItem() {
             image: "cookie-tin.jpg",
             quantity: parseInt(event.target.elements.product_quantity.value),
             price: parseInt(event.target.elements.product_price.value),
-            myItem: "true",
+            ownedBy: "true",
             category: { _id: categoryId, name: categoryName },
         };
 

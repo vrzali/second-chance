@@ -10,7 +10,7 @@ import spinner from '../../assets/spinner.gif';
 function ProductList(props) {
   const [state, dispatch] = useStoreContext();
 
-  const { currentCategory } = state;
+  const { currentCategory, currentUser } = state;
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
@@ -37,12 +37,12 @@ function ProductList(props) {
     if (props.type === "myItems") {
       if (!currentCategory) {
         return state.products.filter(
-          (product) => product !== undefined && product.myItem === "true"
+          (product) => product !== undefined && product.ownedBy === currentUser
         );
       }
   
       return state.products.filter(
-        (product) => (product.category._id === currentCategory) && (product.myItem == "true")
+        (product) => (product.category._id === currentCategory) && (product.ownedBy === currentUser)
       );
     }
 
@@ -68,7 +68,7 @@ function ProductList(props) {
               name={product.name}
               price={product.price}
               quantity={product.quantity}
-              myItem={product.myItem}
+              ownedBy={product.ownedBy}
             />
           ))}
         </div>

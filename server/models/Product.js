@@ -29,8 +29,8 @@ const productSchema = new Schema({
     ref: 'Category',
     required: true
   },
-  myItem: {
-    type: String
+  ownedBy: {
+    type: Schema.Types.ObjectId
   }
 });
 

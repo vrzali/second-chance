@@ -9,7 +9,7 @@ export const QUERY_PRODUCTS = gql`
       price
       quantity
       image
-      myItem
+      ownedBy
       category {
         _id
       }
@@ -33,7 +33,7 @@ export const QUERY_ALL_PRODUCTS = gql`
       description
       price
       quantity
-      myItem
+      ownedBy
       category {
         name
       }
@@ -64,7 +64,7 @@ export const QUERY_USER = gql`
           description
           price
           quantity
-          myItem
+          ownedBy
           image
         }
       }

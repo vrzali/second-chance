@@ -22,7 +22,7 @@ function Detail() {
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  const { products, cart } = state;
+  const { products, cart, currentUser } = state;
 
   useEffect(() => {
     // already in global store
@@ -93,7 +93,7 @@ function Detail() {
 
           <p>
             <strong>Price:</strong>${currentProduct.price}
-            {currentProduct.myItem === "true" ? "" : <span>
+            {currentProduct.ownedBy === currentUser ? "" : <span>
             <button onClick={addToCart}>Add to Cart</button>
             <button
               disabled={!cart.find((p) => p._id === currentProduct._id)}

@@ -21,7 +21,7 @@ export const ADD_ORDER = gql`
         description
         price
         quantity
-        myItem
+        ownedBy
         category {
           name
         }
@@ -58,7 +58,7 @@ export const ADD_PRODUCT_MUTATION = gql`
     $image: String!
     $quantity: Int!
     $price: Float!
-    $myItem: String!
+    $ownedBy: ID!
     $category: GraphQLCategory!
   ) {
     addProduct(
@@ -67,7 +67,7 @@ export const ADD_PRODUCT_MUTATION = gql`
       image: $image
       quantity: $quantity
       price: $price
-      myItem: $myItem
+      ownedBy: $ownedBy
       category: $category
     ) {
       _id
