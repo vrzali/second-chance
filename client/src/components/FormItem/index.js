@@ -1,18 +1,35 @@
 import React from "react";
 import { useStoreContext } from '../../utils/GlobalState';
+import { ADD_PRODUCT } from "../../utils/actions";
+import { useMutation } from '@apollo/client';
+import { ADD_PRODUCT_MUTATION } from '../../utils/mutations';
 
 function FormItem() {
     const [state, dispatch] = useStoreContext();
     const { categories } = state;
+    const [addProduct] = useMutation(ADD_PRODUCT_MUTATION);
 
-    const handleSubmit = (event) => {
-        console.log("here");
-        console.log(event.target.elements.product_name.value);
-        console.log(event.target.elements.product_description.value);
-        console.log(event.target.elements.product_price.value);
-        console.log(event.target.elements.product_category.value);
-        console.log(event.target.elements.product_image.value);
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        const mutationResponse = await addProduct({
+            variables: {
+                name: event.target.elements.product_name.value,
+                description: event.target.elements.product_description.value,
+                image: "cookie-tin.jpg",
+                quantity: event.target.elements.product_quantity.value,
+                price: event.target.elements.product_price.value,
+                myItem: "true",
+                category: { name: event.target.elements.product_category.value },
+            },
+            });
+        const product = mutationResponse.data.addProduct.product;
+        console.log("here");
+        console.log(product);
+        dispatch({
+            type: ADD_PRODUCT,
+            product: product
+        });
+        
     };
 
     return (
@@ -22,7 +39,7 @@ function FormItem() {
             handleSubmit(event);
           }}>
               <label for="name">Name:</label>
-              <input type="text" id="product_name" placeholder="Product name..."/>
+              <input type="text" id="product_name" placeholder="Product name..." required/>
               <label for="category">Category:</label>              
               <select name="product_category">
                   {categories.map((item) => (
@@ -34,10 +51,13 @@ function FormItem() {
                   ))}
               </select>
               <label for="description">Description:</label>
-              <input type="text" id="product_description" placeholder="Description..."/>
+              <input type="text" id="product_description" placeholder="Description..." required/>
               <label for="price">Price:</label>
-              <input type="text" id="product_price" placeholder="0.00"/>
-              <input type="file" name="product_image" width="48" height="48"></input>
+              <input type="number" id="product_price" required/>
+              <label for="quantity">Quantity:</label>
+              <input type="number" id="product_quantity" required/>
+              <label for="image">Image:</label>
+              <input type="file" name="product_image" width="48" height="48" required></input>
               <button id="add-product-button" type="submit" class="button">Add</button>
           </form>
           <div class="panel">

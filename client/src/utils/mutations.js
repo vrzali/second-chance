@@ -50,3 +50,27 @@ export const ADD_USER = gql`
     }
   }
 `;
+
+export const ADD_PRODUCT_MUTATION = gql`
+  mutation addProduct(
+    $name: String!
+    $description: String!
+    $image: String!
+    $quantity: Int!
+    $price: Float!
+    $myItem: String!
+    $category: GraphQLCategory!
+  ) {
+    addProduct(
+      name: $name
+      description: $description
+      image: $image
+      quantity: $quantity
+      price: $price
+      myItem: $myItem
+      category: $category
+    ) {
+      _id
+    }
+  }
+`;
