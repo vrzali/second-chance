@@ -11,24 +11,34 @@ function FormItem() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const mutationResponse = await addProduct({
-            variables: {
-                name: event.target.elements.product_name.value,
-                description: event.target.elements.product_description.value,
-                image: "cookie-tin.jpg",
-                quantity: event.target.elements.product_quantity.value,
-                price: event.target.elements.product_price.value,
-                myItem: "true",
-                category: { name: event.target.elements.product_category.value },
-            },
-            });
+
+        const categoryName = event.target.elements.product_category.value;
+        let categoryId;
+        categories.map((item) => {
+            if (item.name === categoryName) {
+                categoryId = item._id;
+            }
+        });
+        const formData = {
+            name: event.target.elements.product_name.value,
+            description: event.target.elements.product_description.value,
+            image: "cookie-tin.jpg",
+            quantity: event.target.elements.product_quantity.value,
+            price: event.target.elements.product_price.value,
+            myItem: "true",
+            category: { _id: categoryId, name: categoryName },
+        };
+
+        console.log(formData);
+
+        const mutationResponse = await addProduct({ variables: formData,});
         const product = mutationResponse.data.addProduct.product;
         console.log("here");
         console.log(product);
-        dispatch({
-            type: ADD_PRODUCT,
-            product: product
-        });
+        // dispatch({
+        //     type: ADD_PRODUCT,
+        //     product: product
+        // });
         
     };
 
@@ -44,7 +54,8 @@ function FormItem() {
               <select name="product_category">
                   {categories.map((item) => (
                       <option
-                      id={item.name}
+                      id={item._id}
+                      name={item.name}
                       >
                       {item.name}
                       </option>
