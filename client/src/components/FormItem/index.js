@@ -4,6 +4,8 @@ import { ADD_PRODUCT } from "../../utils/actions";
 import { useMutation } from '@apollo/client';
 import { ADD_PRODUCT_MUTATION } from '../../utils/mutations';
 import {useNavigate} from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { QUERY_USER } from '../../utils/queries';
 
 
 function FormItem() {
@@ -11,6 +13,13 @@ function FormItem() {
     const { categories } = state;
     const [addProduct] = useMutation(ADD_PRODUCT_MUTATION);
     const navigate = useNavigate();
+
+    const { data } = useQuery(QUERY_USER);
+    let currentUser;
+
+    if (data) {
+        currentUser = data.user._id;
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -28,7 +37,7 @@ function FormItem() {
             image: "cookie-tin.jpg",
             quantity: parseInt(event.target.elements.product_quantity.value),
             price: parseInt(event.target.elements.product_price.value),
-            ownedBy: "true",
+            ownedBy: currentUser,
             category: { _id: categoryId, name: categoryName },
         };
 
@@ -42,6 +51,7 @@ function FormItem() {
         });
         
         navigate('/myItems');
+        window.location.reload(); 
     };
 
     const handleClick = async (event) => {

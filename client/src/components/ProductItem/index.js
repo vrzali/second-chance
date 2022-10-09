@@ -4,9 +4,18 @@ import { pluralize } from "../../utils/helpers"
 import { useStoreContext } from "../../utils/GlobalState";
 import { ADD_TO_CART, UPDATE_CART_QUANTITY } from "../../utils/actions";
 import { idbPromise } from "../../utils/helpers";
+import { useQuery } from '@apollo/client';
+import { QUERY_USER } from '../../utils/queries';
 
 function ProductItem(item) {
   const [state, dispatch] = useStoreContext();
+  
+  const { data } = useQuery(QUERY_USER);
+  let currentUser;
+
+  if (data) {
+    currentUser = data.user._id;
+  }
 
   const {
     image,
@@ -17,7 +26,7 @@ function ProductItem(item) {
     ownedBy,
   } = item;
 
-  const { cart, currentUser } = state
+  const { cart } = state
 
   const addToCart = () => {
     const itemInCart = cart.find((cartItem) => cartItem._id === _id)
