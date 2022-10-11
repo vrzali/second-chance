@@ -33,7 +33,7 @@ const resolvers = {
           path: 'orders.products',
           populate: 'category'
         });
-        
+
         user.orders.sort((a, b) => b.purchaseDate - a.purchaseDate);
 
         return user;
@@ -88,11 +88,15 @@ const resolvers = {
       });
 
       return { session: session.id };
+    },
+
+    getProduct: async (parent, { name }) => {
+      return await Product.findOne({ name })
     }
   },
   Mutation: {
     addUser: async (parent, args) => {
-      
+
       const user = await User.create(args);
       const token = signToken(user);
 
@@ -101,16 +105,16 @@ const resolvers = {
     addProduct: async (parent, args, context) => {
       if (context.user) {
         const product = await Product.create({ ...args, username: context.user.username });
-    
+
         await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { products: product._id } },
           { new: true }
         );
-    
+
         return product;
       }
-    
+
       throw new AuthenticationError('You need to be logged in!');
     },
     addOrder: async (parent, { products }, context) => {
