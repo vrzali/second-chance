@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect }  from "react";
 import { useStoreContext } from '../../utils/GlobalState';
 import { useMutation } from '@apollo/client';
 import { ADD_PRODUCT_MUTATION } from '../../utils/mutations';
@@ -12,6 +12,8 @@ function FormItem() {
     const { categories } = state;
     const [addProduct] = useMutation(ADD_PRODUCT_MUTATION);
     const navigate = useNavigate();
+    const [formImage, setFormImage] = useState();
+    const [preview, setPreview] = useState()
 
     const { data } = useQuery(QUERY_USER);
     let currentUser;
@@ -33,7 +35,7 @@ function FormItem() {
         const formData = {
             name: event.target.elements.product_name.value,
             description: event.target.elements.product_description.value,
-            image: "cookie-tin.jpg",
+            image: formImage.name,
             quantity: parseInt(event.target.elements.product_quantity.value),
             price: parseInt(event.target.elements.product_price.value),
             ownedBy: currentUser,
@@ -45,18 +47,42 @@ function FormItem() {
         navigate('/myItems');
         window.location.reload(); 
     };
+      // create a preview as a side effect, whenever selected file is changed
+    useEffect(() => {
+        if (!formImage) {
+            setPreview(undefined)
+            return
+        }
+        const objectUrl = URL.createObjectURL(formImage)
+        console.log (objectUrl)
+        setPreview(objectUrl)
+
+        // free memory when ever this component is unmounted
+        return () => URL.revokeObjectURL(objectUrl) 
+    }, [formImage])
+
+    const singleFileChangedHandler = ( e ) => {
+        e.preventDefault();
+        if (!e.target.files || e.target.files.length === 0) {
+        setFormImage(undefined)
+        return
+        }
+        // I've kept this example simple by using the first image instead of multiple
+        setFormImage(e.target.files[0])
+        console.log(e.target.files[0])
+    };
 
     const handleClick = async (event) => {
         navigate('/myItems');
     };
 
     return (
-      <div class="add-product-form">
-          <header class="main-header">Add new product</header>
+      <div className="add-product-form">
+          <header className="main-header">Add new product</header>
           <form onSubmit={(event) => {
             handleSubmit(event);
           }}>
-              <label for="name">Name:</label>
+              <label htmlFor="name">Name:</label>
               <input type="text" id="product_name" placeholder="Product name..." required/>
               <label>Category:</label>              
               <select name="product_category">
@@ -75,11 +101,17 @@ function FormItem() {
               <input type="number" id="product_price" required/>
               <label >Quantity:</label>
               <input type="number" id="product_quantity" required/>
-              <label >Image:</label>
-              <input type="file" name="product_image" width="48" height="48" required></input>
-              <button id="add-product-button" type="submit" class="button">Add</button>
+              <label htmlFor="product_image">Image:</label>
+              <input 
+              type="file" name="product_image" 
+              width="48" height="48" 
+              required
+              onChange={singleFileChangedHandler} 
+              />
+                {formImage &&  <img src={preview} alt=""/> }
+              <button id="add-product-button" type="submit" className="button">Add</button>
           </form>
-          <div class="panel">
+          <div className="panel">
           <button type="button" onClick={(event) => {
             handleClick(event);
           }}>Cancel</button>
