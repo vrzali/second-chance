@@ -2,8 +2,12 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Category, Order } = require('../models');
 const { signToken } = require('../utils/auth');
 const stripe = require('stripe')('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+const GraphQLUpload = require("graphql-upload/GraphQLUpload.js");
+const fs = require('fs')
+const { finished } = require('stream/promises')
 
 const resolvers = {
+  Upload: GraphQLUpload,
   Query: {
     categories: async () => {
       return await Category.find();
@@ -104,21 +108,57 @@ const resolvers = {
     },
     addProduct: async (parent, args, context) => {
       if (context.user) {
+<<<<<<< HEAD
         const product = await Product.create({ ...args, username: context.user.username });
+=======
+
+        const { createReadStream, filename } = await args.file;
+ 
+              // Invoking the `createReadStream` will return a Readable Stream.
+              // See https://nodejs.org/api/stream.html#stream_readable_streams
+              const stream = createReadStream();
+
+              // This is purely for demonstration purposes and will overwrite the
+              // file in photos with the filename specified here in the current working directory (server directory) on EACH upload.
+              const out = fs.createWriteStream(`./photos/${filename}`);
+              stream.pipe(out);
+              await finished(out);
+
+              //after writing the file to disk, create a base64 string representation of the picture
+              const filebase64str = fs.readFileSync(
+                  `./photos/${filename}`,
+                  {
+                      encoding: "base64",
+                  }
+              );
+
+              const fileExtension = filename
+                  .split(/\./g) //split string on the dot
+                  .find((item) => /jpg|jpeg|png/g.test(item)); //find the item in the array that matches the regex pattern
+
+        delete args.file
+        const product = await Product.create({ ...args, image: `data:image/${fileExtension};base64, ` +
+        filebase64str, username: context.user.username });
+>>>>>>> feat/upload-image
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { products: product._id } },
           { new: true }
         );
+<<<<<<< HEAD
 
+=======
+          fs.unlinkSync(`./photos/${filename}`)
+>>>>>>> feat/upload-image
         return product;
       }
 
       throw new AuthenticationError('You need to be logged in!');
     },
+
     addOrder: async (parent, { products }, context) => {
-      console.log(context);
+     
       if (context.user) {
         const order = new Order({ products });
 

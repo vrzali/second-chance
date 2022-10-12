@@ -8,6 +8,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
+import { createUploadLink } from "apollo-upload-client";
+
 import Home from './pages/Home';
 import Detail from './pages/Detail';
 import NoMatch from './pages/NoMatch';
@@ -21,8 +23,12 @@ import MyItems from './pages/MyItems';
 import About from './pages/About';
 import Form from './pages/Form';
 
-const httpLink = createHttpLink({
-  uri: '/graphql',
+const httpLink = createUploadLink({
+  uri:
+      process.env.NODE_ENV === "development"
+          ? "http://localhost:3001/graphql"
+          : "/graphql",
+  headers: { "Apollo-Require-Preflight": "true" },
 });
 
 const authLink = setContext((_, { headers }) => {
