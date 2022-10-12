@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from "react";
 import { useStoreContext } from '../../utils/GlobalState';
 import { useMutation } from '@apollo/client';
-import { ADD_PRODUCT_MUTATION } from '../../utils/mutations';
+import { ADD_PRODUCT_MUTATION  } from '../../utils/mutations';
 import {useNavigate} from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { QUERY_USER } from '../../utils/queries';
@@ -11,6 +11,7 @@ function FormItem() {
     const [state] = useStoreContext();
     const { categories } = state;
     const [addProduct] = useMutation(ADD_PRODUCT_MUTATION);
+    //const [addImage] = useMutation(UPLOAD_FILE);
     const navigate = useNavigate();
     const [formImage, setFormImage] = useState();
     const [preview, setPreview] = useState()
@@ -36,12 +37,14 @@ function FormItem() {
             name: event.target.elements.product_name.value,
             description: event.target.elements.product_description.value,
             image: formImage.name,
+            file: formImage,
             quantity: parseInt(event.target.elements.product_quantity.value),
             price: parseInt(event.target.elements.product_price.value),
             ownedBy: currentUser,
             category: { _id: categoryId, name: categoryName },
         };
         console.log(formData)
+        // await addImage({ variables: {file: formImage}})
         await addProduct({ variables: formData });
         
         //navigate('/myItems');
