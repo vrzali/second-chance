@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductItem from '../ProductItem';
 import { useStoreContext } from '../../utils/GlobalState';
 import { UPDATE_PRODUCTS } from '../../utils/actions';
@@ -6,85 +6,107 @@ import { useQuery } from '@apollo/client';
 import { QUERY_PRODUCTS, QUERY_USER } from '../../utils/queries';
 import { idbPromise } from '../../utils/helpers';
 import spinner from '../../assets/spinner.gif';
+import { Form, Button } from 'semantic-ui-react'
 
 function ProductList(props) {
-  const [state, dispatch] = useStoreContext();
+    const [state, dispatch] = useStoreContext();
 
-  const { currentCategory } = state;
+    const { currentCategory } = state;
 
-  const { loading, data } = useQuery(QUERY_PRODUCTS);
+    const [formState, setFormState] = useState('');
 
-  const response = useQuery(QUERY_USER);
-  let currentUser;
+    const { loading, data } = useQuery(QUERY_PRODUCTS);
 
-  if (response.data) {
-    currentUser = response.data.user._id;
-  }
+    const response = useQuery(QUERY_USER);
+    let currentUser;
 
-  useEffect(() => {
-    if (data) {
-      dispatch({
-        type: UPDATE_PRODUCTS,
-        products: data.products,
-      });
-      data.products.forEach((product) => {
-        idbPromise('products', 'put', product);
-      });
-    } else if (!loading) {
-      idbPromise('products', 'get').then((products) => {
-        dispatch({
-          type: UPDATE_PRODUCTS,
-          products: products,
-        });
-      });
+    if (response.data) {
+        currentUser = response.data.user._id;
     }
-  }, [data, loading, dispatch]);
 
-  function filterProducts() {
-    if (props.type === "myItems") {
-      if (!currentCategory) {
+    useEffect(() => {
+        if (data) {
+            dispatch({
+                type: UPDATE_PRODUCTS,
+                products: data.products,
+            });
+            data.products.forEach((product) => {
+                idbPromise('products', 'put', product);
+            });
+        } else if (!loading) {
+            idbPromise('products', 'get').then((products) => {
+                dispatch({
+                    type: UPDATE_PRODUCTS,
+                    products: products,
+                });
+            });
+        }
+    }, [data, loading, dispatch]);
+
+    function filterProducts() {
+        if (props.type === "myItems") {
+            if (!currentCategory) {
+                return state.products.filter(
+                    (product) => product !== undefined && product.ownedBy === currentUser
+                );
+            }
+
+            return state.products.filter(
+                (product) => (product.category._id === currentCategory) && (product.ownedBy === currentUser)
+            );
+        }
+
+        if (!currentCategory) {
+            return state.products;
+        }
+
         return state.products.filter(
-          (product) => product !== undefined && product.ownedBy === currentUser
+            (product) => product.category._id === currentCategory
         );
-      }
-  
-      return state.products.filter(
-        (product) => (product.category._id === currentCategory) && (product.ownedBy === currentUser)
-      );
     }
 
-    if (!currentCategory) {
-      return state.products;
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormState({
+            ...formState,
+            [name]: value,
+        });
+        console.log(formState);
     }
 
-    return state.products.filter(
-      (product) => product.category._id === currentCategory
-    );
-  }
-
-  return (
-    <div className="my-2">
-      <h2>Our Products:</h2>
-      {state.products.length ? (
-        <div className="flex-row">
-          {filterProducts().map((product) => (
-            <ProductItem
-              key={product._id}
-              _id={product._id}
-              image={product.image}
-              name={product.name}
-              price={product.price}
-              quantity={product.quantity}
-              ownedBy={product.ownedBy}
-            />
-          ))}
+    return (
+        <div className="my-2">
+            {/* <h3>Search Products:</h3>
+            <Form>
+                <Form.Field id='searchProductName' width={4}>
+                    <label for="productName">Enter a product name:</label>
+                    <input type="text" name="productName" onChange={handleChange} />
+                    <Button type='submit' form='searchProductName' value='Submit'>Search</Button>
+                </Form.Field>
+            </Form> */}
+            <div className="my-3">
+                <h2><b>Listed Products:</b></h2>
+                {state.products.length ? (
+                    <div className="flex-row">
+                        {filterProducts().map((product) => (
+                            <ProductItem
+                                key={product._id}
+                                _id={product._id}
+                                image={product.image}
+                                name={product.name}
+                                price={product.price}
+                                quantity={product.quantity}
+                                ownedBy={product.ownedBy}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <h3>You haven't added any products yet!</h3>
+                )}
+                {loading ? <img src={spinner} alt="loading" /> : null}
+            </div>
         </div>
-      ) : (
-        <h3>You haven't added any products yet!</h3>
-      )}
-      {loading ? <img src={spinner} alt="loading" /> : null}
-    </div>
-  );
+    );
 }
 
 export default ProductList;

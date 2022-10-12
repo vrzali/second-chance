@@ -1,6 +1,14 @@
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
+  scalar Upload
+  
+  type File {
+        filename: String!
+        mimetype: String!
+        encoding: String!
+    }
+
   type Category {
     _id: ID
     name: String
@@ -47,6 +55,7 @@ const typeDefs = gql`
     user: User
     order(_id: ID!): Order
     checkout(products: [ID]!): Checkout
+    getProduct(name: String): [Product]
   }
   
   input GraphQLCategory {
@@ -59,8 +68,9 @@ const typeDefs = gql`
     addOrder(products: [ID]!): Order
     updateUser(firstName: String, lastName: String, email: String, password: String): User
     updateProduct(_id: ID!, quantity: Int!): Product
-    addProduct(name: String!, description: String!, image: String!, quantity: Int!, price: Float!, ownedBy: ID!, category: GraphQLCategory!): Product
+    addProduct(file: Upload!, name: String!, description: String!, quantity: Int!, price: Float!, ownedBy: ID!, category: GraphQLCategory!): Product
     login(email: String!, password: String!): Auth
+
   }
 `;
 
