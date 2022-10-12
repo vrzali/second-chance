@@ -108,9 +108,6 @@ const resolvers = {
     },
     addProduct: async (parent, args, context) => {
       if (context.user) {
-<<<<<<< HEAD
-        const product = await Product.create({ ...args, username: context.user.username });
-=======
 
         const { createReadStream, filename } = await args.file;
  
@@ -139,18 +136,13 @@ const resolvers = {
         delete args.file
         const product = await Product.create({ ...args, image: `data:image/${fileExtension};base64, ` +
         filebase64str, username: context.user.username });
->>>>>>> feat/upload-image
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { products: product._id } },
           { new: true }
         );
-<<<<<<< HEAD
-
-=======
           fs.unlinkSync(`./photos/${filename}`)
->>>>>>> feat/upload-image
         return product;
       }
 

@@ -103,6 +103,9 @@ dist
 # TernJS port file
 .tern-port
 
+# Skip preflight check
+client/.env
+
 build/
 .vscode
 .DS_Store

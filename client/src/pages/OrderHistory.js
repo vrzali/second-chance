@@ -14,9 +14,7 @@ function OrderHistory() {
 
   return (
     <>
-      <div className="container my-1">
-        <Link to="/">← Back to Products</Link>
-
+      <div className="container" style={{ paddingTop: '30px'}}>
         {user ? (
           <>
             <h2>
