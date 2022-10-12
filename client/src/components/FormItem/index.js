@@ -41,8 +41,8 @@ function FormItem() {
             ownedBy: currentUser,
             category: { _id: categoryId, name: categoryName },
         };
-
-        await addProduct({ variables: formData,});
+        console.log(formData)
+        await addProduct({ variables: formData });
         
         navigate('/myItems');
         window.location.reload(); 
