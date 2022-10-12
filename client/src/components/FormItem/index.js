@@ -44,8 +44,8 @@ function FormItem() {
         console.log(formData)
         await addProduct({ variables: formData });
         
-        navigate('/myItems');
-        window.location.reload(); 
+        //navigate('/myItems');
+        //window.location.reload(); 
     };
       // create a preview as a side effect, whenever selected file is changed
     useEffect(() => {
