@@ -6,7 +6,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // IMPORTED BOOTSTRAP --- > > > MUST USE ANOTHER FRAMEWORK
 // WHEN UPDATING ALSO CHANGE components/CategoryMenu/index.js
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
     <React.StrictMode>

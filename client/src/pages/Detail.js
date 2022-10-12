@@ -96,9 +96,8 @@ function Detail() {
                     <Grid>
                         <Grid.Column width={9}>
                             <Image
-                                src={`/images/${currentProduct.image}`}
+                                src={`${currentProduct.image}`}
                                 alt={currentProduct.name}
-                                bordered
                             />
                         </Grid.Column>
                         <Grid.Column width={6}>
