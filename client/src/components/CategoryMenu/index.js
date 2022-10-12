@@ -7,6 +7,10 @@ import {
 } from '../../utils/actions';
 import { QUERY_CATEGORIES } from '../../utils/queries';
 import { idbPromise } from '../../utils/helpers';
+// WHEN UPDATING ALSO CHANGE client/src/index.js
+// Imports DROP-DOWN menu to be rendered in categories selection
+// Update to use another framework different from Bootstrap
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function CategoryMenu() {
   const [state, dispatch] = useStoreContext();
@@ -41,19 +45,45 @@ function CategoryMenu() {
     });
   };
 
+  // ON REFACTORING REMOVE COMMENTED SECTION AFTER UPDATES APPROVED ! ! !
+  // return (
+  //   <div>
+  //     <h2>Choose a Category:</h2>
+  //     {categories.map((item) => (
+  //       <button
+  //         key={item._id}
+  //         onClick={() => {
+  //           handleClick(item._id);
+  //         }}
+  //       >
+  //         {item.name}
+  //       </button>
+  //     ))}
+  //   </div>
+  // );
+
+  // CREATES A CATEGOTY DROP-DOWN MENU USING BOOTSTRAP.
+  // IT MUST BE UPDATED TO USE ANOTHER FRAMEWORK. KEEP BOOTSTRAP AS PLACEHOLDER UNTIL UPDATES ARE IMPLEMENTED
   return (
     <div>
       <h2>Choose a Category:</h2>
+      <Dropdown>
+      <Dropdown.Toggle variant="success" id="dropdown-basic">
+        Choose a category:
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
       {categories.map((item) => (
-        <button
+        <Dropdown.Item
           key={item._id}
           onClick={() => {
             handleClick(item._id);
           }}
         >
           {item.name}
-        </button>
+        </Dropdown.Item>
       ))}
+      </Dropdown.Menu>
+      </Dropdown>
     </div>
   );
 }

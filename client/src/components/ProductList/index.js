@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductItem from '../ProductItem';
 import { useStoreContext } from '../../utils/GlobalState';
 import { UPDATE_PRODUCTS } from '../../utils/actions';
@@ -11,6 +11,8 @@ function ProductList(props) {
   const [state, dispatch] = useStoreContext();
 
   const { currentCategory } = state;
+
+  const [formState, setFormState] = useState('');
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
@@ -47,7 +49,7 @@ function ProductList(props) {
           (product) => product !== undefined && product.ownedBy === currentUser
         );
       }
-  
+
       return state.products.filter(
         (product) => (product.category._id === currentCategory) && (product.ownedBy === currentUser)
       );
@@ -62,8 +64,23 @@ function ProductList(props) {
     );
   }
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormState({
+      ...formState,
+      [name]: value,
+    });
+    console.log(formState);
+  }
+
   return (
     <div className="my-2">
+      <h3>Search Products:</h3>
+      <form id='searchProductName'>
+        <label for="productName">Enter a product name:</label>
+        <input type="text" name="productName" onChange={handleChange} />
+        <button type='submit' form='searchProductName' value='Submit'>Search</button>
+      </form>
       <h2>Our Products:</h2>
       {state.products.length ? (
         <div className="flex-row">
