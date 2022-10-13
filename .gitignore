@@ -106,6 +106,6 @@ dist
 # Skip preflight check
 client/.env
 
-build/
+# build/
 .vscode
 .DS_Store
