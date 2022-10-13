@@ -62,20 +62,22 @@ To run and test this application, simply access the deployment [URL](https://sec
 ## Demo
 ### View the following screen shots of the app:
 <!-- ADD SCREENSHOTS WHEN FRONT-END IS FINISHED -->
-![Screenshot Placeholder]()
+![Home](./assets/images/home.png)
 <br />
 
-![Screenshot Placeholder]()
+![Sign Up](./assets/images/signup.png)
 <br />
 
-![Screenshot Placeholder]()
+![Login](./assets/images/login.png)
 <br />
 
-![Screenshot Placeholder]()
+![Add Item](./assets/images/addItem.png)
+<br />
+
+![My Items](./assets/images/myItems.png)
 
 <br />
 
-## Test
 ## Test
     – To test and use the app on your local machine follow the instructions:
         • Clone the repository
